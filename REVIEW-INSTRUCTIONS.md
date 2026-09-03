@@ -42,7 +42,8 @@ stays clean of version metadata (the team trims it anyway; see §5).
 ## 3. Pre-run checkpoint (green flag)
 
 Before running anything, state: the input file picked (+ date), the panel
-configuration, the maturity mode, and which pipeline stages will run — then **wait
+configuration, the maturity mode, the blue-ink context mode (informed, the
+default, or blind — see §5), and which pipeline stages will run — then **wait
 for the user's OK**. The user may omit stages for that run (e.g., "solo review",
 "omite revision"); by default all stages run.
 
@@ -231,7 +232,9 @@ the Google Docs outline panel works):
 - **PART 0 — COVER**, kept to what the team actually shares: the heading
   "AI PANEL REVIEW"; the **color legend with each reviewer's name rendered in its
   own color**, whose FIX line reads exactly "■ FIX — suggested fixes by Claude
-  Fable (has context of previous drafts)"; the PANEL SNAPSHOT (per-reviewer
+  Fable (has context of previous drafts)" in informed mode, or "■ FIX —
+  suggested fixes by Claude Fable (this run only, no context of previous
+  drafts)" in blind mode (§5 blue-ink context); the PANEL SNAPSHOT (per-reviewer
   ratings + consensus); and the prioritized fix list. Nothing else: no banner,
   no run explainer, no source-version line (that lives in `archive/README.md`),
   no scaffolding prose. Plain readable text throughout — no fancy fonts.
@@ -243,7 +246,8 @@ the Google Docs outline panel works):
   a heading in its reviewer color), synthesis, disagreements, prioritized fixes,
   suggested references. Concise: no metadata table repeating Part 0 — one line
   naming the panel seats is enough. From the second run on, include the
-  resolved / remaining / new comparison.
+  resolved / remaining / new comparison — in blind blue-ink mode (§5) omit it
+  from the docx entirely; it lives only in the logs and the continuity map.
 - **PART 3 — REVISION PLAN** (stage 3 output).
 - **PART 4 — REVISED DRAFT** (stage 4 output): revised text with changes in blue +
   `[TEAM: …]` flags, then the Response-to-Reviewers list.
@@ -251,11 +255,25 @@ the Google Docs outline panel works):
 Since everything lives in one document, omit anything that would be repeated
 verbatim across parts — say it once in the earliest part it belongs to.
 
-**Where the blue ink's context comes from (instructed, not incidental):** before
-writing the FIX lines, the synthesis, and the continuity map, the orchestrator
-reads `log/ISSUES.md`, `log/REVIEW-LOG.md`, and the previous run's archive. That
-context flows only into the blue material and the logs — never into anything a
-reviewer receives (§4b Layer 1).
+**Where the blue ink's context comes from — chosen at the checkpoint (§3):**
+
+- **Informed (default):** before writing the FIX lines, the synthesis, and the
+  prioritized fix list, the orchestrator reads `log/ISSUES.md`,
+  `log/REVIEW-LOG.md`, and the previous run's archive. That context flows only
+  into the blue material and the logs — never into anything a reviewer receives
+  (§4b Layer 1).
+- **Blind:** the blue material is written from this run only — the document under
+  review and the clean panel reports, nothing else. To guarantee that, it is
+  produced by a separate agent dispatched with only those inputs (the
+  orchestrator's own session already carries history, so it must not write the
+  blue material itself in this mode). No logs, no prior archives, no
+  conversation context reach that agent.
+
+In BOTH modes the continuity map and the log updates (§8, Layer 2) are
+orchestrator work done after the deliverable's blue material is written, with
+full log access — the blind option changes what goes into the docx, not the
+bookkeeping. The Part 0 legend must state the mode used (see Part 0 above); the
+run's `archive/README.md` records it too.
 
 **Language rule:** everything the orchestrator writes — cover, synthesis, FIX
 lines, the fix list — is in plain language: short sentences, no jargon without a
