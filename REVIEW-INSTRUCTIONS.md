@@ -251,6 +251,12 @@ the Google Docs outline panel works):
 Since everything lives in one document, omit anything that would be repeated
 verbatim across parts — say it once in the earliest part it belongs to.
 
+**Where the blue ink's context comes from (instructed, not incidental):** before
+writing the FIX lines, the synthesis, and the continuity map, the orchestrator
+reads `log/ISSUES.md`, `log/REVIEW-LOG.md`, and the previous run's archive. That
+context flows only into the blue material and the logs — never into anything a
+reviewer receives (§4b Layer 1).
+
 **Language rule:** everything the orchestrator writes — cover, synthesis, FIX
 lines, the fix list — is in plain language: short sentences, no jargon without a
 one-clause explanation, no codes or shorthand the team has not seen. Reviewer
