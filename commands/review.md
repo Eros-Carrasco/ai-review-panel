@@ -28,6 +28,11 @@ You are running the review-panel system. The single source of truth is the
      card generation plus the review). Note that an optional seat's findings are
      only comparable across runs that included it.
    - Maturity: draft (default) or final (§2).
+   - Blue-ink context (§5): informed (default — the orchestrator reads the logs
+     and the previous run's archive before writing the FIX lines, synthesis, and
+     fix list) or blind (a separate agent writes the blue material from this
+     run's document and panel reports only; the resolved/remaining/new
+     comparison is omitted from the docx and lives only in the logs).
    - Wildcard seat (only if the user opted in): generate the Reviewer
      Configuration Card per §11, using
      the `academic-paper-reviewer` field-analysis agent from
@@ -37,7 +42,8 @@ You are running the review-panel system. The single source of truth is the
      say the run proceeds with the frozen seats only.
 
 4. State the full pre-run checkpoint per §3: input file and date, panel
-   configuration, maturity mode, stages, and (for FOCUSED) the focus areas plus
+   configuration, maturity mode, blue-ink context mode, stages, and (for
+   FOCUSED) the focus areas plus
    any area dropped since the previous run. Then WAIT for the user's explicit
    green flag. Nothing runs without it.
 
