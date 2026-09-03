@@ -1,6 +1,6 @@
 # AI Review Panel
 
-A disciplined way to run a simulated NSF-style review panel on a working draft, using Claude Code. Five independent reviewer agents read the document blind (no steering, no history, no sight of each other), each writes a full report, and the results are assembled into a color-annotated Word document the team can read side by side with the draft, plus a running ledger that tracks every finding across runs.
+A disciplined way to run a simulated NSF-style review panel on a working draft, using Claude Code. Six frozen reviewer seats plus a per-run wildcard seat read the document blind (no steering, no history, no sight of each other), each writes a full report, and the results are assembled into a color-annotated Word document the team can read side by side with the draft, plus a running ledger that tracks every finding across runs.
 
 This is the system used by the Future Reality Lab to iterate an NSF CISE/IIS HCC proposal through repeated review rounds. The process file (`REVIEW-INSTRUCTIONS.md`) is the system; everything else here supports it.
 
@@ -45,8 +45,8 @@ See `templates/folder-layout.md` for details.
 1. Put the draft in `document to review/`.
 2. Open Claude Code in the project folder and ask for a review run.
 3. Claude states a **checkpoint**: which file it picked, the panel configuration, the mode (draft or final), and which stages will run. **Nothing runs until you give the green flag.** This step is not ceremony; it is where scope mistakes get caught.
-4. Five reviewer agents run in parallel, each with the frozen prompt from `REVIEW-INSTRUCTIONS.md` §4c, verbatim. They see only the document.
-5. Claude assembles the outputs: the five reports, a synthesis (agreements, disagreements, prioritized fixes), the annotated `full-review.docx`, a post-hoc comparison against the issue ledger, and updates to the two logs.
+4. The seven reviewer agents run in parallel: the six frozen seats with their §4c prompts, verbatim, and the wildcard seat with its per-run card. They see only the document.
+5. Claude assembles the outputs: the reports, a synthesis (agreements, disagreements, prioritized fixes), the annotated `full-review.docx`, a post-hoc comparison against the issue ledger, and updates to the two logs.
 
 The scripts in `scripts/` are the mechanical parts Claude uses along the way:
 
@@ -54,7 +54,7 @@ The scripts in `scripts/` are the mechanical parts Claude uses along the way:
 - `render_pdf.swift` — the macOS PDF renderer the extractor calls.
 - `build_review_docx.py` — turns a run's archive into the color-annotated Word deliverable.
 
-**The scripts alone do not produce a review.** Between extraction and the deliverable there is a step only Claude performs during the run: reading the five reports, writing the synthesis, and deciding which reviewer comment attaches to which passage of the document (that mapping is saved as `annotations.json` in the run's archive, and `build_review_docx.py` reads it). Cloning this repo gives you the process and the tooling; running a review requires Claude Code in the loop.
+**The scripts alone do not produce a review.** Between extraction and the deliverable there is a step only Claude performs during the run: reading the reports, writing the synthesis, and deciding which reviewer comment attaches to which passage of the document (that mapping is saved as `annotations.json` in the run's archive, and `build_review_docx.py` reads it). Cloning this repo gives you the process and the tooling; running a review requires Claude Code in the loop.
 
 ## Figures and margin comments
 
