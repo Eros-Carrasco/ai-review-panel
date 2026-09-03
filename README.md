@@ -1,6 +1,6 @@
 # AI Review Panel
 
-A disciplined way to run a simulated NSF-style review panel on a working draft, using Claude Code. Six frozen reviewer seats plus a per-run wildcard seat read the document blind (no steering, no history, no sight of each other), each writes a full report, and the results are assembled into a color-annotated Word document the team can read side by side with the draft, plus a running ledger that tracks every finding across runs.
+A disciplined way to run a simulated NSF-style review panel on a working draft, using Claude Code. A panel of blind reviewer agents reads the document: five core frozen seats always, plus two optional seats you choose per run (a sixth frozen XR-systems seat, and a wildcard whose identity is generated fresh for each document) (no steering, no history, no sight of each other), each writes a full report, and the results are assembled into a color-annotated Word document the team can read side by side with the draft, plus a running ledger that tracks every finding across runs.
 
 This is the system used by the Future Reality Lab to iterate an NSF CISE/IIS HCC proposal through repeated review rounds. The process file (`REVIEW-INSTRUCTIONS.md`) is the system; everything else here supports it.
 
@@ -45,7 +45,7 @@ See `templates/folder-layout.md` for details.
 1. Put the draft in `document to review/`.
 2. Open Claude Code in the project folder and ask for a review run.
 3. Claude states a **checkpoint**: which file it picked, the panel configuration, the mode (draft or final), and which stages will run. **Nothing runs until you give the green flag.** This step is not ceremony; it is where scope mistakes get caught.
-4. The seven reviewer agents run in parallel: the six frozen seats with their §4c prompts, verbatim, and the wildcard seat with its per-run card. They see only the document.
+4. The reviewer agents run in parallel: the core seats with their §4c prompts, verbatim, plus whichever optional seats you chose (R5 with its frozen prompt; W with its per-run card). They see only the document. As a cost guide: each seat is roughly 45-70k tokens on a 15-page document; the wildcard costs about two seats, because its card is generated first.
 5. Claude assembles the outputs: the reports, a synthesis (agreements, disagreements, prioritized fixes), the annotated `full-review.docx`, a post-hoc comparison against the issue ledger, and updates to the two logs.
 
 The scripts in `scripts/` are the mechanical parts Claude uses along the way:
@@ -107,8 +107,7 @@ Read `REVIEW-INSTRUCTIONS.md` in full before the first run. The load-bearing rul
 
 ## The wildcard seat and the academic-paper-reviewer skill
 
-The panel has six frozen seats plus a wildcard seat (§11 of the
-process file): a reviewer whose identity is generated fresh each run by the
+The wildcard seat (§11 of the process file) is optional, chosen at the checkpoint: a reviewer whose identity is generated fresh each run by the
 `academic-paper-reviewer` skill's field-analysis phase, which reads the document
 and writes a Reviewer Configuration Card for an angle the frozen seats do not
 cover. The card generator is the skill's field-analysis agent: the installed

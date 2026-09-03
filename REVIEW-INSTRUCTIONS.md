@@ -374,8 +374,9 @@ touches `ISSUES.md`; one note in `REVIEW-LOG.md`.
 
 ## 11. Wildcard seat (W) — dynamic persona via the academic-paper-reviewer skill
 
-On every run, one additional reviewer whose identity is
-generated fresh for the current document, using the `academic-paper-reviewer`
+An optional seat, chosen at the checkpoint (its cost is roughly two seats:
+card generation plus the review itself). When included: one additional reviewer
+whose identity is generated fresh for the current document, using the `academic-paper-reviewer`
 skill's Phase 0 (field analysis): an analyst agent reads the document and writes
 a Reviewer Configuration Card (specific identity, three review focuses tailored
 to this document, declared blind spots), deliberately choosing an angle the

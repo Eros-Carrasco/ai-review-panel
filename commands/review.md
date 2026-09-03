@@ -22,8 +22,14 @@ You are running the review-panel system. The single source of truth is the
      everything else runs as shipped.
    - Run type: CLEAN (default), FOCUSED (§9, user must name the focus areas), or
      GAP-FILL (§10).
+   - Panel size: the five core seats (PF, R1-R4) always run. Offer the two
+     optional seats with their approximate token cost so the user can decide:
+     R5 (XR Systems Engineering, ~1 extra seat) and W (wildcard, ~2 extra seats:
+     card generation plus the review). Note that an optional seat's findings are
+     only comparable across runs that included it.
    - Maturity: draft (default) or final (§2).
-   - Wildcard seat: generate the Reviewer Configuration Card per §11, using
+   - Wildcard seat (only if the user opted in): generate the Reviewer
+     Configuration Card per §11, using
      the `academic-paper-reviewer` field-analysis agent from
      `~/.claude/skills/academic-paper-reviewer/agents/` if installed, else the
      vendored copy at `third_party/academic-research-skills/`. Include the card
