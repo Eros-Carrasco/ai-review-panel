@@ -151,14 +151,12 @@ def main():
     if os.path.exists(sp): synth = open(sp).read()
 
     body = []
-    # PART 0 — cover
-    body.append(heading("AI PANEL REVIEW — " + title, 1))
-    body.append(para(run("AI panel review — not part of the document; delete colored lines before submission.", COL["GRAY"], bold=True)))
-    body.append(gray("Five independent reviewers read the whole document with no steering and no prior context. Original text stays black; reviewer comments appear inline right after the passage they talk about, verbatim from each reviewer's report. Blue FIX lines are the orchestrator's plain-language suggestions."))
+    # PART 0 — cover (kept to what the team shares; version metadata lives in archive/README.md)
+    body.append(heading("AI PANEL REVIEW", 1))
     body.append(heading("Color legend", 2))
     for s in SEATS:
         body.append(para(run("■ %s — %s" % (s, ROLE[s]), COL[s], bold=True)))
-    body.append(para(run("■ FIX — suggested fixes. Gray — scaffolding and page markers.", COL["FIX"], bold=True)))
+    body.append(para(run("■ FIX — suggested fixes by Claude Fable (has context of previous drafts)", COL["FIX"], bold=True)))
     body.append(heading("NSF panel snapshot", 2))
     for s, r in ann.get("snap", []):
         body.append(para(run("%s — %s: " % (s, ROLE.get(s, s)), COL.get(s), bold=True) + run(r, "000000"), indent=360))
@@ -171,7 +169,6 @@ def main():
     # PART 1 — annotated document
     body.append(pagebreak())
     body.append(heading("PART 1 — ANNOTATED DOCUMENT", 1))
-    body.append(gray("The full text in black, with reviewer comments in color right after the passage they talk about."))
     used = set()
 
     def annotate(t):

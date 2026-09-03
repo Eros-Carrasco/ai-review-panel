@@ -70,6 +70,31 @@ def extract_docx(path, outdir):
     with open(out, "w") as f:
         f.write("\n".join(lines))
     print("wrote %s (%d estimated pages, %d figures)" % (out, page, fig))
+    extract_docx_comments(z, outdir)
+
+
+def extract_docx_comments(z, outdir):
+    """If the docx stores margin comments, write them (author, anchored passage,
+    text) to <outdir>/team-comments.md so the checkpoint can offer the
+    hide / show / show-plus-appendix options."""
+    if "word/comments.xml" not in z.namelist():
+        return
+    comments = ET.fromstring(z.read("word/comments.xml")).findall(W + "comment")
+    if not comments:
+        return
+    doc = z.read("word/document.xml").decode("utf-8", "ignore")
+    lines = ["# Margin comments found in the document", ""]
+    for c in comments:
+        cid = c.get(W + "id")
+        author = c.get(W + "author") or "unknown"
+        text = "".join(n.text or "" for n in c.iter(W + "t")).strip()
+        m = re.search(r'<w:commentRangeStart w:id="%s"/>(.*?)<w:commentRangeEnd w:id="%s"/>' % (cid, cid), doc, re.S)
+        anchor = re.sub(r"<[^>]+>", "", m.group(1)).strip() if m else "(no anchored passage)"
+        lines.append('- **%s**, on "%s": %s' % (author, anchor[:180], text))
+    outp = os.path.join(outdir, "team-comments.md")
+    with open(outp, "w") as f:
+        f.write("\n".join(lines) + "\n")
+    print("wrote %s (%d comments)" % (outp, len(comments)))
 
 
 def extract_pdf(path, outdir):

@@ -23,8 +23,10 @@ The document in `document to review/` — if several, the most recently modified
 `.pdf` or `.docx`; if empty, say so and stop. Prefer `.docx` when both exist
 (cleaner paragraph anchoring than PDF extraction).
 
-Record the exact filename + last-modified date of the version reviewed in every
-output header — drafts circulate in multiple versions.
+Record the exact filename + last-modified date of the version reviewed in the
+run's `archive/README.md` — drafts circulate in multiple versions and "which
+version did the panel see" must never be a guess. The shared deliverable itself
+stays clean of version metadata (the team trims it anyway; see §5).
 
 ## 2. Target program and maturity
 
@@ -43,6 +45,14 @@ Before running anything, state: the input file picked (+ date), the panel
 configuration, the maturity mode, and which pipeline stages will run — then **wait
 for the user's OK**. The user may omit stages for that run (e.g., "solo review",
 "omite revision"); by default all stages run.
+
+If the document contains margin comments (a .docx with stored comments, or a
+PDF exported with annotations), the checkpoint declares it and offers three
+options: hide them from the reviewers; show them as part of the document; or
+show them plus an appendix listing each comment with its anchored passage, which
+the reviewers must address in a dedicated section of their reports. Figures and
+embedded images are always shown (extracted from a .docx, rendered pages for a
+PDF).
 
 For FOCUSED runs, the checkpoint must additionally list the focus areas **and**
 name explicitly any area that was in focus in the previous run but is being
@@ -218,12 +228,13 @@ Then update `log/REVIEW-LOG.md` (new row + run note) and `log/ISSUES.md`
 Structure of the `full-review.docx` (single document, clean heading hierarchy so
 the Google Docs outline panel works):
 
-- **PART 0 — COVER** (team standard, matching `template/`): gray banner "AI panel
-  review — not part of the proposal; delete colored lines before submission";
-  **color legend with each reviewer's name rendered in its own color** (one run per
-  reviewer — never all-gray); NSF PANEL SNAPSHOT (per-reviewer ratings + consensus
-  funding recommendation + source version + mode); TOP MUST-FIX list. Plain
-  readable text throughout — no fancy fonts.
+- **PART 0 — COVER**, kept to what the team actually shares: the heading
+  "AI PANEL REVIEW"; the **color legend with each reviewer's name rendered in its
+  own color**, whose FIX line reads exactly "■ FIX — suggested fixes by Claude
+  Fable (has context of previous drafts)"; the PANEL SNAPSHOT (per-reviewer
+  ratings + consensus); and the prioritized fix list. Nothing else: no banner,
+  no run explainer, no source-version line (that lives in `archive/README.md`),
+  no scaffolding prose. Plain readable text throughout — no fancy fonts.
 - **PART 1 — ANNOTATED PROPOSAL** (the primary artifact): full original text in
   order, with colored reviewer comments inserted inline immediately after the
   passage they refer to, plus blue `■ FIX:` suggestions. Panel splits are labeled
@@ -239,6 +250,11 @@ the Google Docs outline panel works):
 
 Since everything lives in one document, omit anything that would be repeated
 verbatim across parts — say it once in the earliest part it belongs to.
+
+**Language rule:** everything the orchestrator writes — cover, synthesis, FIX
+lines, the fix list — is in plain language: short sentences, no jargon without a
+one-clause explanation, no codes or shorthand the team has not seen. Reviewer
+reports are the exception: they appear verbatim, always.
 
 Implementation note: generate the `.docx` by writing minimal OOXML directly (zip:
 `[Content_Types].xml`, `_rels/.rels`, `word/document.xml`) — no pandoc/installs.

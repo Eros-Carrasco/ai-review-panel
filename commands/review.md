@@ -11,8 +11,9 @@ You are running the review-panel system. The single source of truth is the
    frozen prompts.
 
 2. Look in `document to review/`. If it is empty, say so and stop. If it holds a
-   document, note its exact filename and last-modified time. If the document
-   contains margin comments, ask the user whether the reviewers should see them.
+   document, note its exact filename and last-modified time. If the document contains margin
+   comments, offer the three §3 options: hide them, show them as part of the
+   document, or show them plus an appendix the reviewers must address.
 
 3. Present the user a short set of choices before anything runs:
    - Venue: if a `venues/` folder exists in the project, list its variants and

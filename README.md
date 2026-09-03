@@ -56,6 +56,14 @@ The scripts in `scripts/` are the mechanical parts Claude uses along the way:
 
 **The scripts alone do not produce a review.** Between extraction and the deliverable there is a step only Claude performs during the run: reading the five reports, writing the synthesis, and deciding which reviewer comment attaches to which passage of the document (that mapping is saved as `annotations.json` in the run's archive, and `build_review_docx.py` reads it). Cloning this repo gives you the process and the tooling; running a review requires Claude Code in the loop.
 
+## Figures and margin comments
+
+What the reviewers see depends on the input type, and comments are always an explicit choice, never an accident:
+
+- **.docx input:** the extractor pulls the text and every embedded figure (reviewers get the images as files). If the file stores margin comments, the extractor also writes them out (author, anchored passage, text) to `team-comments.md`.
+- **.pdf input (macOS):** every page is rendered to an image, so reviewers see exactly what is on the page — including margin comments if the PDF was exported with them.
+- **At the checkpoint,** if comments exist, you choose one of three: hide them from the reviewers; show them as part of the document; or show them plus an appendix listing each comment, which every reviewer must address in a dedicated section of their report. Figures are always shown.
+
 ## Map of the process file, section by section
 
 `REVIEW-INSTRUCTIONS.md` is the whole system. This is what each section does and why it exists:
@@ -66,7 +74,7 @@ The scripts in `scripts/` are the mechanical parts Claude uses along the way:
 
 - **§2 Target program and maturity.** What the panel judges against. The venue (NSF HCC as shipped; see `venues/` for variants) and the maturity mode: in **draft** mode, placeholders, TODOs and typos go into a short checklist and do not drag the score; in **final** mode everything counts, which is the dress rehearsal for submission.
 
-- **§3 Pre-run checkpoint (green flag).** Before anything runs, Claude states what it is about to do: the file it picked, the panel, the mode, the stages, and (for FOCUSED runs) the focus areas plus anything dropped since the last run. The human approves or corrects. This section exists because scope mistakes are cheap here and expensive after a run.
+- **§3 Pre-run checkpoint (green flag).** Before anything runs, Claude states what it is about to do: the file it picked, the panel, the mode, the stages, what happens with any margin comments (hide / show / show plus an appendix the reviewers must address), and (for FOCUSED runs) the focus areas plus anything dropped since the last run. The human approves or corrects. This section exists because scope mistakes are cheap here and expensive after a run.
 
 - **§4 The pipeline.** The stages of a run: panel review, then editorial synthesis (agreements, disagreements recorded rather than averaged away, a prioritized fix list). Cross-stage rules live here too: suggested references must be real publications, and no institution facts may be invented.
 
@@ -74,7 +82,7 @@ The scripts in `scripts/` are the mechanical parts Claude uses along the way:
 
 - **§4c Frozen reviewer prompts.** The full text every seat receives: one shared calibration (criteria, mode, format) plus one lens per seat: PF (venue fit and completeness), R1 (methodology and statistics), R2 (related work and novelty, including a citation-integrity audit), R3 (AI systems, Broader Impacts, privacy), R4 (Devil's Advocate, who must build the strongest case *against*), R5 (XR systems engineering). "Frozen" means used verbatim, every run: change them only here, in git, where the change is visible, because ratings across runs are comparable only while the instrument holds still.
 
-- **§5 Output.** What a run produces: the run folder, the `full-review.docx` (Part 0: cover with the color legend, per-seat ratings and the fix list; Part 1: the full draft in black with each reviewer's comments inline, in that reviewer's color, right after the passage they discuss; Part 2: the five complete reports and the synthesis), and the `archive/` with every machine-readable piece so any later question can be answered without re-running.
+- **§5 Output.** What a run produces: the run folder, the `full-review.docx` (Part 0: a clean cover with only the color legend, per-seat ratings and the fix list — no banners or run metadata, which live in the archive; Part 1: the full draft in black with each reviewer's comments inline, in that reviewer's color, right after the passage they discuss; Part 2: the five complete reports and the synthesis), and the `archive/` with every machine-readable piece, including which exact document version was reviewed. Everything the orchestrator writes is in plain language; reviewer reports appear verbatim.
 
 - **§6 Color legend.** Each seat's fixed color in the deliverable, stable across runs so readers learn to recognize voices: PF dark gold, R1 red, R2 green, R3 orange, R4 teal, R5 purple, W brown, FIX suggestions blue, scaffolding gray.
 
